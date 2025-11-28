@@ -116,7 +116,12 @@ LESSONS = [
         "hint": "Use SELECT * FROM employees",
         "defaultQuery": "SELECT * FROM employees",
         "solution": "SELECT * FROM employees",
-        "check_func": lambda df: len(df) == 6 and len(df.columns) == 6
+        "check_func": lambda df: len(df) == 6 and len(df.columns) == 6,
+        "quiz": {
+            "question": "Which SQL keyword is used to retrieve data from a database?",
+            "options": ["GET", "SELECT", "FETCH", "RETRIEVE"],
+            "answer": "SELECT"
+        }
     },
     {
         "id": 2,
@@ -128,7 +133,12 @@ LESSONS = [
         "hint": "SELECT * FROM products WHERE price < 100",
         "defaultQuery": "SELECT * FROM products WHERE price < 100",
         "solution": "SELECT * FROM products WHERE price < 100",
-        "check_func": lambda df: len(df) == 2 and (df['price'] < 100).all()
+        "check_func": lambda df: len(df) == 2 and (df['price'] < 100).all(),
+        "quiz": {
+            "question": "Which operator is used for 'not equal' in SQL?",
+            "options": ["==", "!= or <>", "><", "==="],
+            "answer": "!= or <>"
+        }
     },
     {
         "id": 3,
@@ -140,7 +150,12 @@ LESSONS = [
         "hint": "SELECT * FROM products ORDER BY price DESC LIMIT 3",
         "defaultQuery": "SELECT * FROM products ORDER BY price DESC LIMIT 3",
         "solution": "SELECT * FROM products ORDER BY price DESC LIMIT 3",
-        "check_func": lambda df: len(df) == 3 and df.iloc[0]['price'] >= df.iloc[1]['price']
+        "check_func": lambda df: len(df) == 3 and df.iloc[0]['price'] >= df.iloc[1]['price'],
+        "quiz": {
+            "question": "To sort results in descending order, which keyword do you use?",
+            "options": ["ASC", "DOWN", "DESC", "SORT"],
+            "answer": "DESC"
+        }
     },
     {
         "id": 4,
@@ -152,7 +167,12 @@ LESSONS = [
         "hint": "SELECT DISTINCT category FROM products",
         "defaultQuery": "SELECT DISTINCT category FROM products",
         "solution": "SELECT DISTINCT category FROM products",
-        "check_func": lambda df: len(df) == 4 and df['category'].is_unique
+        "check_func": lambda df: len(df) == 4 and df['category'].is_unique,
+        "quiz": {
+            "question": "What does the DISTINCT keyword do?",
+            "options": ["Sorts the data", "Removes duplicate rows", "Limits the number of rows", "Filters data"],
+            "answer": "Removes duplicate rows"
+        }
     },
     {
         "id": 5,
@@ -164,7 +184,12 @@ LESSONS = [
         "hint": "SELECT orders.id, customers.name FROM orders JOIN customers ON orders.customer_id = customers.id",
         "defaultQuery": "SELECT orders.id, customers.name FROM orders JOIN customers ON orders.customer_id = customers.id",
         "solution": "SELECT orders.id, customers.name FROM orders JOIN customers ON orders.customer_id = customers.id",
-        "check_func": lambda df: len(df) == 5 and 'name' in df.columns and 'id' in df.columns
+        "check_func": lambda df: len(df) == 5 and 'name' in df.columns and 'id' in df.columns,
+        "quiz": {
+            "question": "Which JOIN returns only rows with a match in BOTH tables?",
+            "options": ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "FULL JOIN"],
+            "answer": "INNER JOIN"
+        }
     },
     {
         "id": 6,
@@ -176,7 +201,12 @@ LESSONS = [
         "hint": "SELECT category, SUM(total) FROM orders GROUP BY category",
         "defaultQuery": "SELECT category, SUM(total) FROM orders GROUP BY category",
         "solution": "SELECT category, SUM(total) FROM orders GROUP BY category",
-        "check_func": lambda df: len(df) == 3 and ((df['category'] == 'Electronics') & (df.iloc[:, 1] == 1650)).any()
+        "check_func": lambda df: len(df) == 3 and ((df['category'] == 'Electronics') & (df.iloc[:, 1] == 1650)).any(),
+        "quiz": {
+            "question": "Which function is NOT an aggregate function?",
+            "options": ["SUM()", "COUNT()", "AVG()", "SELECT()"],
+            "answer": "SELECT()"
+        }
     },
     {
         "id": 7,
@@ -188,7 +218,63 @@ LESSONS = [
         "hint": "SELECT category, SUM(total) FROM orders GROUP BY category HAVING SUM(total) > 1000",
         "defaultQuery": "SELECT category, SUM(total) FROM orders GROUP BY category HAVING SUM(total) > 1000",
         "solution": "SELECT category, SUM(total) FROM orders GROUP BY category HAVING SUM(total) > 1000",
-        "check_func": lambda df: len(df) == 1 and df.iloc[0]['category'] == 'Electronics'
+        "check_func": lambda df: len(df) == 1 and df.iloc[0]['category'] == 'Electronics',
+        "quiz": {
+            "question": "When is the HAVING clause used?",
+            "options": ["To filter rows before grouping", "To filter groups after aggregation", "To sort the results", "To join tables"],
+            "answer": "To filter groups after aggregation"
+        }
+    },
+    {
+        "id": 8,
+        "category": "08. Subqueries",
+        "title": "Subqueries",
+        "description": "A subquery is a query nested inside another query. It can be used to retrieve data that will be used in the main query's condition.",
+        "concept": "Subqueries are often used in the WHERE clause. They execute first, and their result is passed to the outer query.",
+        "task": "Find employees who earn more than the average salary of all employees.",
+        "hint": "SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees)",
+        "defaultQuery": "SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees)",
+        "solution": "SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees)",
+        "check_func": lambda df: len(df) == 2 and (df['salary'] > 79500).all(),
+        "quiz": {
+            "question": "A subquery in the WHERE clause executes:",
+            "options": ["After the main query", "Before the main query", "Simultaneously with the main query", "It depends"],
+            "answer": "Before the main query"
+        }
+    },
+    {
+        "id": 9,
+        "category": "09. Case Statements",
+        "title": "CASE Statements",
+        "description": "The CASE statement goes through conditions and returns a value when the first condition is met (like an if-then-else statement).",
+        "concept": "It allows you to create new categories or labels in your result set based on existing data values.",
+        "task": "List all products and create a new column 'PriceCategory' that is 'Premium' if price > 500, else 'Standard'.",
+        "hint": "SELECT name, price, CASE WHEN price > 500 THEN 'Premium' ELSE 'Standard' END as PriceCategory FROM products",
+        "defaultQuery": "SELECT name, price, CASE WHEN price > 500 THEN 'Premium' ELSE 'Standard' END as PriceCategory FROM products",
+        "solution": "SELECT name, price, CASE WHEN price > 500 THEN 'Premium' ELSE 'Standard' END as PriceCategory FROM products",
+        "check_func": lambda df: len(df) == 5 and 'PriceCategory' in df.columns and df[df['name'] == 'Laptop Pro'].iloc[0]['PriceCategory'] == 'Premium',
+        "quiz": {
+            "question": "What happens if no condition in a CASE statement is met and there is no ELSE part?",
+            "options": ["It returns NULL", "It returns 0", "It throws an error", "It returns the original value"],
+            "answer": "It returns NULL"
+        }
+    },
+    {
+        "id": 10,
+        "category": "10. Window Functions",
+        "title": "Window Functions",
+        "description": "Window functions perform calculations across a set of table rows that are somehow related to the current row.",
+        "concept": "Unlike GROUP BY, window functions do not cause rows to become grouped into a single output row. RANK() assigns a rank to each row within a partition.",
+        "task": "Rank employees by salary within their department.",
+        "hint": "SELECT name, department, salary, RANK() OVER (PARTITION BY department ORDER BY salary DESC) as rank FROM employees",
+        "defaultQuery": "SELECT name, department, salary, RANK() OVER (PARTITION BY department ORDER BY salary DESC) as rank FROM employees",
+        "solution": "SELECT name, department, salary, RANK() OVER (PARTITION BY department ORDER BY salary DESC) as rank FROM employees",
+        "check_func": lambda df: len(df) == 6 and 'rank' in df.columns and df[(df['department'] == 'Engineering') & (df['name'] == 'Charlie Brown')].iloc[0]['rank'] == 1,
+        "quiz": {
+            "question": "Which clause defines the 'window' or set of rows for the window function?",
+            "options": ["GROUP BY", "HAVING", "OVER", "WITH"],
+            "answer": "OVER"
+        }
     }
 ]
 
@@ -236,55 +322,80 @@ with st.sidebar:
 # --- MAIN CONTENT ---
 st.header(current_lesson['title'])
 
-# Concept Section
-with st.expander("💡 Key Concept", expanded=True):
-    st.info(current_lesson['concept'])
-    st.markdown(current_lesson['description'])
+# Tabs for Lesson and Quiz
+tab1, tab2 = st.tabs(["📚 Lesson & Practice", "🧠 Knowledge Check"])
 
-# Task Section
-st.markdown(f"### 🎯 Your Mission")
-st.markdown(f"**{current_lesson['task']}**")
-with st.expander("Need a hint?"):
-    st.markdown(f"Try using: `{current_lesson['hint']}`")
+with tab1:
+    # Concept Section
+    with st.expander("💡 Key Concept", expanded=True):
+        st.info(current_lesson['concept'])
+        st.markdown(current_lesson['description'])
 
-# Editor Section
-st.markdown("### ⌨️ SQL Editor")
-query = st.text_area("Write your query here:", value=st.session_state.query_text, height=150, key="editor")
+    # Task Section
+    st.markdown(f"### 🎯 Your Mission")
+    st.markdown(f"**{current_lesson['task']}**")
+    with st.expander("Need a hint?"):
+        st.markdown(f"Try using: `{current_lesson['hint']}`")
 
-col1, col2 = st.columns([1, 5])
-with col1:
-    run_clicked = st.button("▶ Run Query", type="primary")
-with col2:
-    if st.button("Show Solution"):
-        st.session_state.query_text = current_lesson['solution']
-        st.rerun()
+    # Editor Section
+    st.markdown("### ⌨️ SQL Editor")
+    query = st.text_area("Write your query here:", value=st.session_state.query_text, height=150, key="editor")
 
-# Execution Logic
-if run_clicked:
-    st.session_state.query_text = query # Update state with current editor content
-    try:
-        # Run query
-        result_df = pd.read_sql_query(query, st.session_state.db_conn)
-        
-        # Display results
-        st.markdown("### 📊 Results")
-        st.dataframe(result_df, use_container_width=True)
-        
-        # Check correctness
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        run_clicked = st.button("▶ Run Query", type="primary")
+    with col2:
+        if st.button("Show Solution"):
+            st.session_state.query_text = current_lesson['solution']
+            st.rerun()
+
+    # Execution Logic
+    if run_clicked:
+        st.session_state.query_text = query # Update state with current editor content
         try:
-            if current_lesson['check_func'](result_df):
-                st.success("🎉 Correct! Great job.")
-                st.session_state.last_run_success = True
-                st.balloons()
-            else:
-                st.warning("The query ran successfully, but the result isn't quite what we're looking for. Try again!")
-                st.session_state.last_run_success = False
-        except Exception as e:
-             st.warning(f"The query ran, but we couldn't verify the result: {e}")
+            # Run query
+            result_df = pd.read_sql_query(query, st.session_state.db_conn)
+            
+            # Display results
+            st.markdown("### 📊 Results")
+            st.dataframe(result_df, use_container_width=True)
+            
+            # Check correctness
+            try:
+                if current_lesson['check_func'](result_df):
+                    st.success("🎉 Correct! Great job.")
+                    st.session_state.last_run_success = True
+                    st.balloons()
+                else:
+                    st.warning("The query ran successfully, but the result isn't quite what we're looking for. Try again!")
+                    st.session_state.last_run_success = False
+            except Exception as e:
+                 st.warning(f"The query ran, but we couldn't verify the result: {e}")
 
-    except Exception as e:
-        st.error(f"❌ Error: {e}")
-        st.session_state.last_run_success = False
+        except Exception as e:
+            st.error(f"❌ Error: {e}")
+            st.session_state.last_run_success = False
+
+with tab2:
+    st.markdown("### 📝 Quick Quiz")
+    st.markdown("Test your understanding of the concept.")
+    
+    quiz_data = current_lesson.get('quiz')
+    if quiz_data:
+        st.markdown(f"**{quiz_data['question']}**")
+        
+        # Use a form to prevent auto-rerun on selection
+        with st.form(key=f"quiz_form_{current_lesson['id']}"):
+            user_answer = st.radio("Select your answer:", quiz_data['options'], index=None)
+            submit_quiz = st.form_submit_button("Submit Answer")
+            
+            if submit_quiz:
+                if user_answer == quiz_data['answer']:
+                    st.success("✅ Correct! You've mastered this concept.")
+                else:
+                    st.error("❌ Not quite. Review the concept and try again!")
+    else:
+        st.info("No quiz available for this lesson.")
 
 # Navigation Footer
 st.markdown("---")
